@@ -5,14 +5,23 @@
 	let { form }: PageProps = $props();
 
 	let loading = $state(false);
-
-	function onsubmit() {
+	const onsubmit = () => {
+		loading = true;
 		count++;
-	}
+		return async ({ result, update }) => {
+			loading = false;
+			await update(result);
+		};
+	};
 </script>
 
 <main class="mx-auto mt-4 w-1/2 max-w-md">
-	<form class="flex w-full flex-col items-start gap-4" method="POST" action="?/create" use:enhance>
+	<form
+		class="flex w-full flex-col items-start gap-4"
+		method="POST"
+		action="?/create"
+		use:enhance={onsubmit}
+	>
 		<div class="w-full">
 			<label for="Title">Title</label>
 			<input
@@ -45,11 +54,12 @@
 				<p class="error">This field is required</p>
 			{/if}
 		</div>
-		<button type="submit" class="h-8 w-full rounded-md bg-white text-black" {onsubmit}>
+		<button type="submit" class="h-8 w-full rounded-md bg-white text-black" disabled={loading}>
 			{#if loading}
 				<p>Loading</p>
+			{:else}
+				submit {count === 0 ? '' : count}
 			{/if}
-			submit {count === 0 ? '' : count}
 		</button>
 	</form>
 	{#if form?.success}
