@@ -6,5 +6,5 @@ export const tasks = pgTable('tasks', {
 	content: varchar('content'),
 	dueDate: timestamp('due_date').notNull(),
 	createdAt: timestamp('created_at').defaultNow().notNull(),
-	updatedAt: timestamp('updated_at').defaultNow()
+	updatedAt: timestamp('updated_at')
 });
